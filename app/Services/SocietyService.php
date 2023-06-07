@@ -111,25 +111,34 @@ class SocietyService
 
     public function applyJobVacancy(array $vacanyData, int $society_id)
     {
-        $job_apply_society = JobApplySociety::create([
-            'job_vacancy_id' => $vacanyData['vacancy_id'],
-            'society_id' => $society_id,
-            'notes' => $vacanyData['notes'],
-            'date' => now()->format('Y-m-d'),
-        ]);
 
-        $job_apply_positions_data = [];
-
-        foreach ($vacanyData['positions'] as $position_id) {
-            $job_apply_positions_data[] = [
-                'job_vacancy_id' => $vacanyData['vacancy_id'],
-                'position_id' => $position_id,
-                'date' => $job_apply_society->date,
-                'society_id' => $society_id,
-            ];
+        try {
+            DB::transaction(function () {
+                $job_apply_society = JobApplySociety::create([
+                    'job_vacancy_id' => $vacanyData['vacancy_id'],
+                    'society_id' => $society_id,
+                    'notes' => $vacanyData['notes'],
+                    'date' => now()->format('Y-m-d'),
+                ]);
+        
+                $job_apply_positions_data = [];
+        
+                foreach ($vacanyData['positions'] as $position_id) {
+                    $job_apply_positions_data[] = [
+                        'job_vacancy_id' => $vacanyData['vacancy_id'],
+                        'position_id' => $position_id,
+                        'date' => $job_apply_society->date,
+                        'society_id' => $society_id,
+                    ];
+                }
+        
+                $job_apply_society->jobApplyPositions()->createMany($job_apply_positions_data);
+            });
+        } catch (\Exception $e) {
+            throw New ServerBusyException;
         }
 
-        $job_apply_society->jobApplyPositions()->createMany($job_apply_positions_data);
+        
     }
 
     public function isPositionApplicable(array $selectedPositions)
