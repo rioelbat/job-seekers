@@ -8,13 +8,13 @@ Registration involves the society platform (registering to the platform and appl
 This module is only to create a society platform. Your job is creating a Society Job application REST API using one of provided PHP frameworks (Laravel).
 ```
 
-This is a solution for a challenge from skill competition in 2023 to create REST API for a Society Job application.
+This is a solution for a challenge from vocational school skill competition in 2023 to create REST API for a Society Job application.
 
 ## Specification
 
 Laravel: ^10
 
-## Prerequisites
+## Prerequisite
 
 -   Sample data: db-dump.sql
 -   Sample API Call test: job_seekers.postman_collection.json & job_seekers.postman_environment.json
@@ -58,8 +58,46 @@ copy .env.example .env
 
 ### A1 - Login and Logout as society
 
+-   [x] A1a - Society Login & If login success
+
+-   [x] A1b - Society Login & If ID Card Number or Password incorrect
+
+-   [x] A1c - Society Logout & If logout success
+
+-   [x] A1d - Society Logout & If logout invalid token
+
 ### A2 - Request Data Validation
+
+-   [x] A2a - Request data validations & If request data validation success
+
+-   [x] A2b - Request data validations & If invalid token
+
+-   [x] A2c - Get society data validation & If success
+
+-   [x] A2d - Get society data validation & If invalid token
 
 ### A3 – Job Vacancy
 
+-   [x] A3a - Get all job vacancy by choosen job category & If success
+
+-   [x] A3b - Get all job vacancy by choosen job category & If invalid token
+
+-   [x] A3c - Get job vacancy detail by vacancy ID and date & If success
+
+-   [x] A3d - Get job vacancy detail by vacancy ID and date & If invalid token
+
 ### A4 – Applying for Jobs
+
+-   [x] A4a - Applying for jobs & If success
+
+-   [x] A4b - Applying for jobs & If invalid token
+
+-   [x] A4c - Applying for jobs & If the society validation data hasn’t accepted by validator
+
+-   [x] A4d - Applying for jobs & If invalid fields
+
+-   [x] A4e - Applying for jobs & If have been 2x applying
+
+-   [x] A4f - Get all of society job applications & If success
+
+-   [x] A4d - Get all of society job applications & If invalid token
