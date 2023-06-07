@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\ValidationStatus;
 use App\Exceptions\DataNotFoundException;
 use App\Exceptions\ValidationNotAcceptedException;
+use App\Exceptions\ServerBusyException;
 use App\Models\AvailablePosition;
 use App\Models\JobApplyPosition;
 use App\Models\JobApplySociety;
