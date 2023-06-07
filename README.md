@@ -53,8 +53,8 @@ copy .env.example .env
 
 -   [x] [A1 - Login and Logout as society](https://github.com/rioelbat/job-seekers-api#a1---login-and-logout-as-society)
 -   [x] [A2 - Request Data Validation](https://github.com/rioelbat/job-seekers-api#a2---request-data-validation)
--   [x] [A3 – Job Vacancy](https://github.com/rioelbat/job-seekers-api#a3---job-vacancy)
--   [x] [A4 – Applying for Jobs](https://github.com/rioelbat/job-seekers-api#a4---applying-for-jobs)
+-   [x] [A3 - Job Vacancy](https://github.com/rioelbat/job-seekers-api#a3---job-vacancy)
+-   [x] [A4 - Applying for Jobs](https://github.com/rioelbat/job-seekers-api#a4---applying-for-jobs)
 
 ### A1 - Login and Logout as society
 
@@ -76,7 +76,7 @@ copy .env.example .env
 
 -   [x] A2d - Get society data validation & If invalid token
 
-### A3 – Job Vacancy
+### A3 - Job Vacancy
 
 -   [x] A3a - Get all job vacancy by choosen job category & If success
 
@@ -86,7 +86,7 @@ copy .env.example .env
 
 -   [x] A3d - Get job vacancy detail by vacancy ID and date & If invalid token
 
-### A4 – Applying for Jobs
+### A4 - Applying for Jobs
 
 -   [x] A4a - Applying for jobs & If success
 
