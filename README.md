@@ -16,8 +16,8 @@ Laravel: ^10
 
 ## Prerequisites
 
-Sample data: db-dump.sql
-Sample API Call test: job_seekers.postman_collection.json & job_seekers.postman_environment.json
+-   Sample data: db-dump.sql
+-   Sample API Call test: job_seekers.postman_collection.json & job_seekers.postman_environment.json
 
 ## Installation
 
