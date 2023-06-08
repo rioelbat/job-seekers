@@ -163,7 +163,7 @@ class SocietyService
 
         return $positions->filter(function ($available_position) {
             return $available_position->applicants_count >= $available_position->apply_capacity;
-        })->count() > 0;
+        })->count() === 0;
     }
 
     public function getAcceptedValidation(int $society_id)

@@ -134,7 +134,7 @@ class SocietyController extends Controller
             throw new DuplicateApplicationException;
         }
 
-        if ($this->societyService->isPositionApplicable($request->positions)) {
+        if (! $this->societyService->isPositionApplicable($request->positions)) {
             throw new PositionNotApplicableException;
         }
 
