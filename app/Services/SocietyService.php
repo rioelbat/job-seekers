@@ -111,24 +111,24 @@ class SocietyService
         return $job_vacancies;
     }
 
-    public function applyJobVacancy(array $applyVacancyData, int $society_id)
+    public function applyJobVacancy(array $jobApplicationData, int $society_id)
     {
 
         DB::beginTransaction();
 
         try {
             $job_apply_society = JobApplySociety::create([
-                'job_vacancy_id' => $applyVacancyData['vacancy_id'],
+                'job_vacancy_id' => $jobApplicationData['vacancy_id'],
                 'society_id' => $society_id,
-                'notes' => $applyVacancyData['notes'],
+                'notes' => $jobApplicationData['notes'],
                 'date' => now()->format('Y-m-d'),
             ]);
     
             $job_apply_positions_data = [];
     
-            foreach ($applyVacancyData['positions'] as $position_id) {
+            foreach ($jobApplicationData['positions'] as $position_id) {
                 $job_apply_positions_data[] = [
-                    'job_vacancy_id' => $applyVacancyData['vacancy_id'],
+                    'job_vacancy_id' => $jobApplicationData['vacancy_id'],
                     'position_id' => $position_id,
                     'date' => $job_apply_society->date,
                     'society_id' => $society_id,
