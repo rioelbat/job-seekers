@@ -16,13 +16,23 @@ class SocietyJobVacancyResource extends JsonResource
 
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
             'category' => $this->jobCategory,
             'company' => $this->company,
             'address' => $this->address,
             'description' => $this->description,
-            'available_positions' => $this->availablePositions,
+            
         ];
+
+        if($this->with_apply_count) {
+            $data['positions'] = $this->positions;
+
+            return $data;
+        }
+
+        $data['positions'] = $this->availablePositions;
+
+        return $data;
     }
 }

@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Http\Request;
 
-class DataNotFoundException extends Exception
+class ServerBusyException extends Exception
 {
     /**
      * Render the exception into an HTTP response.

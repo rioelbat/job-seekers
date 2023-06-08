@@ -16,6 +16,7 @@ use App\Http\Resources\SocietyJobVacancyResource;
 use App\Http\Resources\SocietyResource;
 use App\Http\Resources\SocietyValidationResource;
 use App\Models\Society;
+use App\Models\AvailablePosition;
 use App\Services\SocietyService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -72,7 +73,7 @@ class SocietyController extends Controller
      */
     public function requestValidation(SocietyStoreValidationRequest $request)
     {
-        $society = $auth('society-token')->user();
+        $society = auth('society-token')->user();
 
         if (empty($society->validation)) {
 
@@ -99,6 +100,9 @@ class SocietyController extends Controller
     public function showJobVacancy(int $job_vacancy_id)
     {
         $job_vacancy = $this->societyService->getPermittedJobVacancy($job_vacancy_id, auth('society-token')->id());
+
+        $job_vacancy->with_apply_count = true; 
+        $job_vacancy->positions = AvailablePosition::withCount('jobApplyPositions as apply_count')->where('job_vacancy_id', $job_vacancy->id)->get();
 
         return new SocietyJobVacancyResource($job_vacancy);
     }
