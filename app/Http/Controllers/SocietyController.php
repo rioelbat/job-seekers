@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\AuthenticateException;
 use App\Exceptions\DataNotFoundException;
 use App\Exceptions\DuplicateApplicationException;
 use App\Exceptions\PositionNotApplicableException;
@@ -15,9 +14,10 @@ use App\Http\Resources\SocietyJobVacancyCollection;
 use App\Http\Resources\SocietyJobVacancyResource;
 use App\Http\Resources\SocietyResource;
 use App\Http\Resources\SocietyValidationResource;
-use App\Models\Society;
 use App\Models\AvailablePosition;
+use App\Models\Society;
 use App\Services\SocietyService;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SocietyController extends Controller
@@ -40,7 +40,7 @@ class SocietyController extends Controller
 
         } catch (ModelNotFoundException $exception) {
 
-            throw new AuthenticateException;
+            throw new AuthenticationException;
         }
 
         return new SocietyResource(auth('society')->user());
@@ -69,7 +69,7 @@ class SocietyController extends Controller
     }
 
     /**
-     * Request a validation for Society
+     * Society request a validation
      */
     public function requestValidation(SocietyStoreValidationRequest $request)
     {
@@ -85,7 +85,7 @@ class SocietyController extends Controller
     }
 
     /**
-     * List Job Vacancies for the Society based on requested Job Category in Society's Validation
+     * List Job Vacancies for the Society by Job Category in Accepted Society's Validation
      */
     public function indexJobVacancies()
     {
@@ -101,7 +101,7 @@ class SocietyController extends Controller
     {
         $job_vacancy = $this->societyService->getPermittedJobVacancy($job_vacancy_id, auth('society-token')->id());
 
-        $job_vacancy->with_apply_count = true; 
+        $job_vacancy->with_apply_count = true;
         $job_vacancy->positions = AvailablePosition::withCount('jobApplyPositions as apply_count')->where('job_vacancy_id', $job_vacancy->id)->get();
 
         return new SocietyJobVacancyResource($job_vacancy);
@@ -124,7 +124,7 @@ class SocietyController extends Controller
     {
         $society_id = auth('society-token')->id();
 
-        if (empty($this->societyService->getAcceptedValidation($society_id))) {
+        if (! $this->societyService->isValidationAccepted($society_id)) {
 
             throw new ValidationNotAcceptedException;
         }

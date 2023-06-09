@@ -30,6 +30,10 @@ class Handler extends ExceptionHandler
         });
 
         $this->renderable(function (AuthenticationException $e, $request) {
+            if ($request->is('api/v1/auth/login')) {
+                return response()->error('ID Card Number or Password incorrect', 401);
+            }
+
             if ($request->is('api/v1/auth/logout')) {
                 return response()->error('Invalid token', 401);
             }

@@ -2,17 +2,18 @@
 
 namespace App\Services;
 
-use DB;
 use App\Enums\ValidationStatus;
 use App\Exceptions\DataNotFoundException;
-use App\Exceptions\ValidationNotAcceptedException;
 use App\Exceptions\ServerBusyException;
+use App\Exceptions\ValidationNotAcceptedException;
 use App\Models\AvailablePosition;
 use App\Models\JobApplyPosition;
 use App\Models\JobApplySociety;
 use App\Models\JobVacancy;
 use App\Models\Society;
 use App\Models\Validation;
+use Arr;
+use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SocietyService
@@ -35,18 +36,13 @@ class SocietyService
         return $society;
     }
 
-    public function getSocietyByAuth(array $credentials): Society
+    public function authenticate(array $credentials): Society
     {
         if (empty($credentials['id_card_number']) || empty($credentials['password'])) {
             throw new ModelNotFoundException;
         }
 
-        return Society::where($credentials)->firstOrFail();
-    }
-
-    public function authenticate(array $credentials): Society
-    {
-        $society = $this->getSocietyByAuth($credentials);
+        $society = Society::where(Arr::only($credentials, ['id_card_number', 'password']))->firstOrFail();
 
         $society = $this->regenerateLoginToken($society);
 
@@ -66,7 +62,7 @@ class SocietyService
         ]);
     }
 
-    public function getPermittedJobVacancy(int $job_vacancy_id, int $society_id)
+    public function getPermittedJobVacancy(int $job_vacancy_id, int $society_id): JobVacancy
     {
         $validation = $this->getAcceptedValidation($society_id);
 
@@ -123,9 +119,9 @@ class SocietyService
                 'notes' => $jobApplicationData['notes'],
                 'date' => now()->format('Y-m-d'),
             ]);
-    
+
             $job_apply_positions_data = [];
-    
+
             foreach ($jobApplicationData['positions'] as $position_id) {
                 $job_apply_positions_data[] = [
                     'job_vacancy_id' => $jobApplicationData['vacancy_id'],
@@ -134,21 +130,20 @@ class SocietyService
                     'society_id' => $society_id,
                 ];
             }
-    
+
             $job_apply_society->jobApplyPositions()->createMany($job_apply_positions_data);
-            
+
             DB::commit();
         } catch (Exception $e) {
             DB::rollback();
 
-            throw New ServerBusyException;
+            throw new ServerBusyException;
         } catch (Throwable $e) {
             DB::rollback();
 
-            throw New ServerBusyException;
+            throw new ServerBusyException;
         }
 
-        
     }
 
     public function isPositionApplicable(array $selectedPositions)
@@ -168,7 +163,15 @@ class SocietyService
 
     public function getAcceptedValidation(int $society_id)
     {
-        return Validation::where('society_id', $society_id)->where('status', ValidationStatus::ACCEPTED)->first();
+        return Validation::where([
+            'society_id' => $society_id,
+            'status' => ValidationStatus::ACCEPTED,
+        ])->first();
+    }
+
+    public function isValidationAccepted(int $society_id)
+    {
+        return ! empty($this->getAcceptedValidation($society_id));
     }
 
     public function isHasApplication(array $selectedPositions, int $society_id): bool

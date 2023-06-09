@@ -22,10 +22,10 @@ class SocietyJobVacancyResource extends JsonResource
             'company' => $this->company,
             'address' => $this->address,
             'description' => $this->description,
-            
+
         ];
 
-        if($this->with_apply_count) {
+        if ($this->with_apply_count) {
             $data['positions'] = $this->positions;
 
             return $data;
